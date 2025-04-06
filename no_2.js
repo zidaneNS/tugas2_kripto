@@ -4,7 +4,7 @@ const q = 97;
 const n = p * q;
 const toitent = (p - 1) * (q - 1);
 
-let e = 0;
+let e = 85;
 
 const plain = "Libur 10 hari";
 
@@ -57,6 +57,9 @@ while ((e_inv * e) % toitent !== 1) {
 
 const d = e_inv;
 
+console.log('diperoleh totient : ', toitent);
+console.log('diperoleh d : ', d);
+
 console.log(`kunci publiknya adalah (${e}, ${n})`);
 console.log(`kunci privatnya adalah (${d}, ${n})`);
 
@@ -70,6 +73,8 @@ console.log('ascii : ', ascii.join(""));
 
 const cipher = [];
 
+console.log(ascii);
+
 ascii.forEach((el, ind) => {
     console.log(`c_${ind} = ${modPow(el, e, n)}`);
     cipher.push(modPow(el, e, n));
@@ -78,6 +83,8 @@ ascii.forEach((el, ind) => {
 console.log('sehingga ciphernya adalah : ', cipher.join(""), '\n');
 
 const m = [];
+
+console.log(cipher);
 
 cipher.forEach((el, ind) => {
     console.log(`m_${ind} = ${modPow(el, d, n)}`);
