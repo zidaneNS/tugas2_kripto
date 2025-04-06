@@ -53,7 +53,7 @@ adj_k.forEach((row, i) => {
 console.log('\nk_inv = ');
 console.log(k_inv);
 
-const cipher = "HKAWNJSVFOILTDI"; //ubah cipherteks disini
+const cipher = "AFPIZTYOEQSPMYQ"; //ubah cipherteks disini
 const cipher_arr = [];
 
 for (let i = 0; i < cipher.split("").length / 3; i++) {
