@@ -1,22 +1,57 @@
-const alphabet = "ABCDEFGHIJKLMNOPQSRTUVWXYZ";
+const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const alphabet_arr = alphabet.split("");
 
+const minor = (matrix, row, col) => matrix.filter((_, i) => i !== row).map(r => r.filter((_, j) => j !== col));
+
+const det2x2 = (m) => m[0][0] * m[1][1] - m[1][0] * m[0][1];
+
+const mod = 26;
+
 const k = [
-    [23, 13, 10],
-    [3, 7, 11],
-    [17, 2, 3]
+    [7, 3, 9],
+    [2, 5, 1],
+    [11, 23, 4]
 ];
 
-const k_inv = [];
-let k_inv_row = [];
+const det_k = ((Math.pow(-1, 0) * k[0][0] * (k[1][1] * k[2][2] - k[1][2] * k[2][1]) + Math.pow(-1, 1) * k[0][1] * (k[1][0] * k[2][2] - k[1][2] * k[2][0]) + Math.pow(-1, 2) * k[0][2] * (k[1][0] * k[2][1] - k[1][1] * k[2][0]) % mod) + mod) % mod;
 
-k.forEach((row, i) => {
+let det_k_inv = 0;
+
+while ((det_k_inv * det_k) % mod !== 1) {
+    det_k_inv++;
+}
+
+const cofactors = [];
+
+for (let i = 0; i < 3; i++) {
+    const temp = [];
+    for (let j = 0; j < 3; j++) {
+        const sign = Math.pow(-1, i + j);
+        const minorMatrix = minor(k, i, j);
+        const cofactor = ((sign * det2x2(minorMatrix) % mod) + mod) % mod;
+        temp.push(cofactor);
+    }
+    cofactors.push(temp);
+}
+
+const adj_k = [
+    [cofactors[0][0], cofactors[1][0], cofactors[2][0]],
+    [cofactors[0][1], cofactors[1][1], cofactors[2][1]],
+    [cofactors[0][2], cofactors[1][2], cofactors[2][2]]
+]
+
+console.log(cofactors);
+console.log(adj_k);
+
+const k_inv = [];
+
+adj_k.forEach((row, i) => {
+    const temp = [];
     row.forEach((cell, j) => {
-        console.log(`k_inv[${i+1}][${j+1}] = ${(cell * 19) % 26}`);
-        k_inv_row.push((cell * 19) % 26);
+        console.log(`k_inv[${i+1}][${j+1}] = ${cell} * ${det_k_inv} ${(cell * det_k_inv) % mod}`);
+        temp.push((cell * det_k_inv) % mod);
     })
-    k_inv.push(k_inv_row);
-    k_inv_row = [];
+    k_inv.push(temp);
 })
 
 console.log('\nk_inv = ');
@@ -41,9 +76,13 @@ cipher_arr.forEach((row) => {
     for (let i = 0; i < 3; i++) {
         const temp = [];
         for (let j = 0; j < 3; j++) {
+            console.log(alphabet_arr.findIndex(el => el === row[j]));
+            console.log(`k_inv[${j+1}][${i+1}] : ${k_inv[j][i]}`);
             temp.push((alphabet_arr.findIndex(el => el === row[j]) * k_inv[j][i]));
         }
-        plain_arr.push(alphabet[temp.reduce((prev, curr) => (prev + curr)) % 26]);
+        console.log('---');
+        console.log(`total : ${temp.reduce((prev, curr) => (prev + curr)) % mod}`);
+        plain_arr.push(alphabet[temp.reduce((prev, curr) => (prev + curr)) % mod]);
     }
 });
 
