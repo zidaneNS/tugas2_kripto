@@ -40,16 +40,12 @@ const adj_k = [
     [cofactors[0][2], cofactors[1][2], cofactors[2][2]]
 ]
 
-console.log(cofactors);
-console.log(adj_k);
-
 const k_inv = [];
 
 adj_k.forEach((row, i) => {
     const temp = [];
     row.forEach((cell, j) => {
-        console.log(`k_inv[${i+1}][${j+1}] = ${cell} * ${det_k_inv} ${(cell * det_k_inv) % mod}`);
-        temp.push((cell * det_k_inv) % mod);
+        temp.push((((cell * det_k_inv) % mod) + mod) % mod);
     })
     k_inv.push(temp);
 })
@@ -57,7 +53,7 @@ adj_k.forEach((row, i) => {
 console.log('\nk_inv = ');
 console.log(k_inv);
 
-const cipher = "AFPIZTYOEQSPMYQ";
+const cipher = "HKAWNJSVFOILTDI";
 const cipher_arr = [];
 
 for (let i = 0; i < cipher.split("").length / 3; i++) {
@@ -68,22 +64,21 @@ for (let i = 0; i < cipher.split("").length / 3; i++) {
     cipher_arr.push(temp);
 }
 
+console.log('cipher : ');
 console.log(cipher_arr);
 
 const plain_arr = [];
 
-cipher_arr.forEach((row) => {
+cipher_arr.forEach((row, ind) => {
     for (let i = 0; i < 3; i++) {
         const temp = [];
         for (let j = 0; j < 3; j++) {
-            console.log(alphabet_arr.findIndex(el => el === row[j]));
-            console.log(`k_inv[${j+1}][${i+1}] : ${k_inv[j][i]}`);
             temp.push((alphabet_arr.findIndex(el => el === row[j]) * k_inv[j][i]));
         }
         console.log('---');
-        console.log(`total : ${temp.reduce((prev, curr) => (prev + curr)) % mod}`);
-        plain_arr.push(alphabet[temp.reduce((prev, curr) => (prev + curr)) % mod]);
+        console.log(`P_${ind + 1} : ${temp.reduce((prev, curr) => (((prev + curr)) % mod) + mod) % mod}`);
+        plain_arr.push(alphabet[temp.reduce((prev, curr) => (((prev + curr)) % mod) + mod) % mod]);
     }
 });
 
-console.log(plain_arr.join(""));
+console.log('plainteks : ', plain_arr.join(""));
