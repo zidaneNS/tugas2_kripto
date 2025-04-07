@@ -4,7 +4,7 @@ const q = 97;
 const n = p * q;
 const toitent = (p - 1) * (q - 1);
 
-let e = 85;
+let e = 0;
 
 const plain = "Libur 10 hari";
 
@@ -67,12 +67,11 @@ const ascii = [];
 
 plain.split("").forEach(el => ascii.push(el.charCodeAt()));
 
-const block_len = 4;
-
 console.log('ascii : ', ascii.join(""));
 
 const cipher = [];
 
+console.log('\ndiperoleh block m : ');
 console.log(ascii);
 
 ascii.forEach((el, ind) => {
@@ -84,6 +83,7 @@ console.log('sehingga ciphernya adalah : ', cipher.join(""), '\n');
 
 const m = [];
 
+console.log('diperoleh c : ');
 console.log(cipher);
 
 cipher.forEach((el, ind) => {
