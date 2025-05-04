@@ -64,33 +64,56 @@ console.log(`kunci publiknya adalah (${e}, ${n})`);
 console.log(`kunci privatnya adalah (${d}, ${n})`);
 
 const ascii = [];
+const m = 4; //jumlah digit per blok
 
-plain.split("").forEach(el => ascii.push(el.charCodeAt()));
+plain.split("").forEach(el => {
+    const rawAscii = el.charCodeAt().toString();
+    if (rawAscii.toString().length < m) {
+        ascii.push(rawAscii.padStart(m, '0'));
+    } else {
+        ascii.push(rawAscii);
+    }
+});
 
-console.log('ascii : ', ascii.join(""));
+const asciiStr = ascii.join("");
+console.log('ascii : ', asciiStr);
+
+const block = [];
+
+for (let i = 0; i < asciiStr.length; i += m) {
+    block.push(parseInt(asciiStr.slice(i, i + m)));
+}
 
 const cipher = [];
 
-console.log('\ndiperoleh block m : ');
-console.log(ascii);
-
-ascii.forEach((el, ind) => {
-    console.log(`c_${ind} = ${modPow(el, e, n)}`);
-    cipher.push(modPow(el, e, n));
+block.forEach(er => {
+    cipher.push(modPow(er, e, n).toString().padStart(m, '0'));
 });
 
-console.log('sehingga ciphernya adalah : ', cipher.join(""), '\n');
+const cipherStr = cipher.join("");
+console.log('cipher :', cipherStr);
 
-const m = [];
+const plainBlock = [];
 
-console.log('diperoleh c : ');
-console.log(cipher);
+for (let i = 0; i < cipherStr.length; i += m) {
+    plainBlock.push(parseInt(cipherStr.slice(i, i + m)));
+}
 
-cipher.forEach((el, ind) => {
-    console.log(`m_${ind} = ${modPow(el, d, n)}`);
-    m.push(modPow(el, d, n));
+const decrypt = [];
+plainBlock.forEach(el => {
+    decrypt.push(modPow(el, d, n).toString().padStart(m, '0'));
 });
 
-console.log('sehingga plainteksnya adalah : ', m.join(""));
+console.log(decrypt);
 
-console.log('hasil ascii == hasil dekripsi : ', m.join("") === ascii.join(""));
+// console.log('diperoleh c : ');
+// console.log(cipher);
+
+// cipher.forEach((el, ind) => {
+//     console.log(`m_${ind} = ${modPow(el, d, n)}`);
+//     m.push(modPow(el, d, n));
+// });
+
+// console.log('sehingga plainteksnya adalah : ', m.join(""));
+
+// console.log('hasil ascii == hasil dekripsi : ', m.join("") === ascii.join(""));
